@@ -1,5 +1,8 @@
-// @leet start
-#include <string
+#include <cstddef>
+#include <string>
+
+using std::string;
+
 class Solution
 {
   public:
@@ -8,37 +11,31 @@ class Solution
         // start with the smallest string and incrementally check if the substing divides both
         int lenStr1 = str1.size(), lenStr2 = str2.size();
 
-        string divisor, dividend;
-        if (lenStr1 > lenStr2)
-        {
-            dividend = str1;
-            divisor = str2;
-        }
-        else
-        {
-            dividend = str1;
-            divisor = str2;
-        }
+        string divisor = (lenStr1 > lenStr1) ? str1 : str2;
+
+		size_t length = divisor.length();
+		for (size_t i = 0; i < length; i++) {
+			if (this->isDivisor(str1, divisor) && this->isDivisor(str2,divisor))
+				return divisor;
+
+			divisor.pop_back();
+		}
+
+		return "";
+		
     }
 
     bool isDivisor(string dividend, string divisor)
     {
-        int lenStr = str.size(), lenDivisor = divisor.size();
+        int lenStr = dividend.size(), lenDivisor = divisor.size();
 
         if (lenStr % lenDivisor != 0)
-        {
             return false;
-        }
 
         for (size_t i = 0; i < lenStr; i++)
-        {
             if (dividend[i] != divisor[i % lenDivisor])
-            {
                 return false;
-            }
-        }
 
         return true;
     }
 };
-// @leet end
