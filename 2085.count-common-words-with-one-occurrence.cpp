@@ -20,13 +20,13 @@ class Solution
         }
 
         std::unordered_map<string, size_t> count2;
-        for (string s : words2)
+        for (string &s : words2)
         {
             count2[s] += 1;
         }
 
         int count = 0;
-        for (string s : words1)
+        for (string &s : words1)
         {
             if (count2.find(s) != count2.end())
                 if (count1[s] == 1 && count2[s] == 1)
