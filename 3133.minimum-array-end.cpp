@@ -1,33 +1,64 @@
 // @leet start
-
-#include <cassert>
-#include <cstddef>
-
+#include <iostream>
+#include <vector>
 class Solution
 {
-
   public:
     long long minEnd(int n, int x)
     {
-        // edge case where x is negative or n <= 0
-        assert(n >= 1 && x >= 0);
+        // EDGE CASE:
+        if (n < 2)
+            return x;
 
-        // The array that we are going to return
-        unsigned long long last = x;
-        size_t i = 1, num = x + 1;
+        // LOGIC: for each element in the array first flip the zero bits
+        // 		flip the bit next to the maximum position of the '1' bit in the binary
+        //	 	representation of x, until we have n elements in the array. order
 
-        while (i < n)
+        // Get the position of zero bits and the maximum position of the '1' bit in the binary
+        // representation of x
+        bool zero_pos[64] = {0};
+        int max_pos = 0;
+        for (int i = 0; i < 64; i++)
         {
-
-            if ((x & num) == x)
+            if (((1LL << i) & x) > 0)
+                max_pos = i;
+            else
             {
-                last = num;
-                i++;
+                zero_pos[i] = 1;
             }
-            ++num;
         }
-        return last;
+
+        // flip all the zeros to 1, incrementally
+        int index = 1;
+        std::vector<long long> answer(n);
+        answer[0] = x;
+
+        for (int i = 0; i < 64; i++)
+        {
+            if (zero_pos[i] == 1)
+            {
+                // fip the zero bit at index i
+                if (index < n)
+                {
+                    answer[index] = (1LL << i) | (answer[index - 1]);
+                    index += 1;
+                }
+                else
+                {
+                    return answer[n - 1];
+                }
+            }
+        }
+
+        int i = 0;
+        while (index < n)
+        {
+            answer[index] = answer[n - 1] | (1LL << (max_pos + i));
+            ++i;
+            index += 1;
+        }
+
+        return answer[n - 1];
     }
 };
-
 // @leet end
